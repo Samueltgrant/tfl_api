@@ -1,0 +1,16 @@
+.content-details {
+  display: grid;
+  grid-template-columns: 3rem 1fr;
+  row-gap: 1.4rem;
+  align-items: center;
+  position: absolute;
+  top: 26.75rem;
+}
+
+.content-details i {
+  justify-self: center;
+}
+
+.content-text {
+  margin-left: 0.3rem;
+}

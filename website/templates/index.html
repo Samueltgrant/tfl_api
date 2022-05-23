@@ -1,0 +1,127 @@
+<html>
+  <head>
+    <title>title</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../static/css/home.css" />
+
+    <!-- <link rel="stylesheet" type="text/css" href="../static/css/general.css" /> -->
+  </head>
+  <body>
+    <div class="wrapper">
+      <h2>Home page</h2>
+      {% if message %}
+      <div class="alert alert-success">{{message}}</div>
+      {% endif %}
+      <form
+        class="form-details input-wrapper"
+        method="POST"
+        autocomplete="off"
+        action=""
+      >
+        <fieldset class="form-fieldset">
+          <div class="container container_form" id="container_form">
+            <div class="entry-row">
+              <div class="entry-row-details">
+                <span class="colour-circle"></span>
+                <div class="entry-input entry-user">
+                  <input
+                    class="login-input username-input"
+                    type="text"
+                    name="user_list"
+                    value=""
+                    placeholder="User 1"
+                  />
+                </div>
+                <div class="entry-input entry-station">
+                  <div class="autocomplete">
+                    <input
+                      class="login-input station-input"
+                      type="text"
+                      id="station-1"
+                      name="station_list"
+                      value=""
+                      placeholder="Station"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="entry-row">
+              <div class="entry-row-details">
+                <span class="colour-circle circle-2"></span>
+                <div class="entry-input entry-user">
+                  <input
+                    class="login-input username-input"
+                    type="text"
+                    name="user_list"
+                    value=""
+                    placeholder="User 2"
+                  />
+                </div>
+                <div class="entry-input entry-station">
+                  <div class="autocomplete">
+                    <input
+                      class="login-input station-input"
+                      type="text"
+                      id="station-2"
+                      name="station_list"
+                      value=""
+                      placeholder="Station"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="container-buttons">
+            <div id="remove_fields">
+              <a
+                href="javascript:void(0);"
+                class="remove-input"
+                title="Remove input"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="icon-remove-input"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zM7 9a1 1 0 000 2h6a1 1 0 100-2H7z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+              </a>
+            </div>
+            <div id="add_more_fields">
+              <a href="javascript:void(0);" class="add-input" title="Add input">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="icon-add-input"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z"
+                    clip-rule="evenodd"
+                  /></svg
+              ></a>
+            </div>
+          </div>
+          <div class="submit-flex">
+            <input
+              type="submit"
+              name="cmdsubmit"
+              class="btn btn-outline-info"
+            />
+          </div>
+        </fieldset>
+        <div class="search"></div>
+      </form>
+    </div>
+    <script src="static/js/autocomplete.js"></script>
+    <script src="static/js/script1.js"></script>
+  </body>
+</html>

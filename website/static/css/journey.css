@@ -1,0 +1,59 @@
+.journey-main-values {
+  display: grid;
+  grid-template-columns: 3rem 1fr 3rem 1fr;
+  padding: 0 2rem 2rem 2rem;
+  align-items: center;
+}
+
+.container-journey {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  align-items: center;
+  justify-content: space-around;
+}
+
+.content-journey {
+  padding: 4rem 3rem;
+}
+/*****************/
+/*  JOURNEY LEG  */
+/*****************/
+.leg {
+  margin-bottom: 3rem;
+}
+
+.journey-heading {
+  margin-bottom: 1rem;
+}
+
+.leg-title {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+.leg-title-flex {
+  display: flex;
+  justify-content: left;
+  gap: 1rem;
+  align-items: center;
+}
+
+.leg-start-div {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.list-stop-points {
+  margin-left: 2rem;
+  list-style-type: "| ";
+  margin-bottom: 0.5rem;
+}
+
+.leg-end-div {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.8rem;
+}

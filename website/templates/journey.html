@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Journey</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Poppins:ital,wght@0,400;0,500;0,700;1,500&family=Rubik:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" type="text/css" href="../static/css/journey.css" />
+    <link rel="stylesheet" type="text/css" href="../static/css/website.css" />
+    <script
+      src="https://kit.fontawesome.com/3b91d03c3b.js"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="container-journey">
+        {% for key, value in
+        session['journey_cards'][session['journey']]['routes'].items() %}
+        <div class="card">
+          <div class="content-journey">
+            <h2 class="title-card" style="color: {{value.colour}};">
+              {{value["user"]}}'s Journey
+            </h2>
+            <div class="content-details">
+              <div class="journey-main-values">
+                <!-- Cost-->
+                {% if value['total_cost'] < 300 %}
+                <i class="fa-icon fa-solid fa-sterling-sign icon-green"></i>
+                {% elif value['total_cost'] < 500 %}
+                <i class="fa-icon fa-solid fa-sterling-sign icon-amber"></i>
+                {% else %}
+                <i class="fa-icon fa-solid fa-sterling-sign icon-red"></i>
+                {% endif %}
+                <div class="details-cost">{{value['total_cost'] / 100}}</div>
+
+                <!-- Duration-->
+                {% if value['total_duration'] < 15 %}
+                <i class="fa-icon fa-regular fa-clock icon-green"></i>
+                {% elif value['total_duration'] < 30 %}
+                <i class="fa-icon fa-regular fa-clock icon-amber"></i>
+                {% else %}
+                <i class="fa-icon fa-regular fa-clock icon-red"></i>
+                {% endif %}
+                <div class="details-duration">
+                  {{value['total_duration']}} mins
+                </div>
+              </div>
+            </div>
+            <div class="journey-details">
+              <h2 class="journey-heading">Journey</h2>
+              {% for leg_key, leg_value in value['journey'].items() %}
+              <div class="leg">
+                <div class="leg-title">
+                  <div class="leg-title-flex">
+                    {% if leg_value['transport_mode'] == 'tube' %}
+                    <i class="fa-icon fa-solid fa-train-subway"></i>
+                    {% elif leg_value['transport_mode'] == 'overground' %}
+                    <i class="fa-icon fa-solid fa-train"></i>
+                    {% elif leg_value['transport_mode'] == 'bus' %}
+                    <i class="fa-icon fa-solid fa-bus"></i>
+                    {% elif leg_value['transport_mode'] == 'walking' %}
+                    <i class="fa-icon fa-solid fa-person-walking"></i>
+                    {% endif %}
+                    <h4 class="journey-leg-heading">
+                      {{leg_value.journey_summary}}
+                    </h4>
+                  </div>
+                  <p class="journey-leg-duration">
+                    {{leg_value['duration']}} mins
+                  </p>
+                </div>
+                <div class="leg-route">
+                  <div class="leg-start-div">
+                    <div class="leg-start">
+                      {{leg_value.departure_point.commonName}}
+                    </div>
+                    <div class="leg-start">{{leg_value['departure_time']}}</div>
+                  </div>
+                  <div class="container-stop-points">
+                    <ul class="list-stop-points">
+                      {% for stop_point in leg_value.stop_points %}
+                      <li class="list-stop-point">{{stop_point}}</li>
+                      {% endfor %}
+                      <p></p>
+                    </ul>
+                  </div>
+                  <div class="leg-end-div">
+                    <div class="leg-end">
+                      {{leg_value.arrival_point.commonName}}
+                    </div>
+                    <div class="leg-start">{{leg_value['arrival_time']}}</div>
+                  </div>
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </body>
+</html>

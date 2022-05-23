@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Results</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Poppins:ital,wght@0,400;0,500;0,700;1,500&family=Rubik:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" type="text/css" href="../static/css/results.css" />
+    <link rel="stylesheet" type="text/css" href="../static/css/website.css" />
+    <script
+      src="https://kit.fontawesome.com/3b91d03c3b.js"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <div class="container">
+      {% for key, value in session['journey_cards'].items() %}
+      <div class="card">
+        <div class="heading">
+          <div class="photo-banner">
+            <img
+              class="img-tube"
+              src='../static/img/{{value["suggested_station"]}} Underground Station.png'
+            />
+          </div>
+          <!-- src="../static/img/lollipop1.png" -->
+        </div>
+        <div class="content">
+          <h2 class="title-card card_{{key}}">
+            {{value["suggested_station"]}}
+          </h2>
+          <div class="content-details">
+            <!-- Cost-->
+            {% if value['avg_cost'] < 3.0 %}
+            <i class="fa-icon fa-solid fa-sterling-sign icon-green"></i>
+            {% elif value['avg_cost'] < 5.0 %}
+            <i class="fa-icon fa-solid fa-sterling-sign icon-amber"></i>
+            {% else %}
+            <i class="fa-icon fa-solid fa-sterling-sign icon-red"></i>
+            {% endif %}
+            <p class="content-text cost">{{value['avg_cost']}}</p>
+
+            <!-- Duration-->
+            {% if value['avg_duration'] < 15 %}
+            <i class="fa-icon fa-regular fa-clock icon-green"></i>
+            {% elif value['avg_duration'] < 30 %}
+            <i class="fa-icon fa-regular fa-clock icon-amber"></i>
+            {% else %}
+            <i class="fa-icon fa-regular fa-clock icon-red"></i>
+            {% endif %}
+            <p class="content-text duration">{{value['avg_duration']}} mins</p>
+
+            <!-- Duration equality-->
+            {% if value['equality_duration'] < 10.0 %}
+            <i class="fa-icon fa-regular fa-face-smile icon-green"></i>
+            {% elif value['equality_duration'] < 50.0 %}
+            <i class="fa-icon fa-regular fa-face-meh icon-amber"></i>
+            {% else %}
+            <i class="fa-icon fa-regular fa-face-frown icon-red"></i>
+            {% endif %}
+            <p class="content-text duration">
+              {{value['equality_duration']}}% journey duration variance
+            </p>
+
+            <!-- Cost equality-->
+            {% if value['equality_cost'] < 10.0 %}
+            <i class="fa-icon fa-regular fa-face-smile icon-green"></i>
+            {% elif value['equality_cost'] < 50.0 %}
+            <i class="fa-icon fa-regular fa-face-meh icon-amber"></i>
+            {% else %}
+            <i class="fa-icon fa-regular fa-face-frown icon-red"></i>
+            {% endif %}
+            <p class="content-text duration">
+              {{value['equality_cost']}}% journey cost variance
+            </p>
+          </div>
+        </div>
+        <div class="search">
+          <form action="" method="post">
+            <button
+              type="submit"
+              name="go_button"
+              value="{{key}}"
+              class="btn btn-outline-info"
+            >
+              Go
+            </button>
+          </form>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </body>
+</html>
