@@ -133,7 +133,7 @@ def gen_lollipop(data, suggested_station):
 
     fig.tight_layout()
     plt.savefig(
-        fr"C:\Users\Terrafirma\Documents\GitHub\personal_projects\tfl_api\tfl_api3\website\static\img\{suggested_station}.png")
+        fr"D:\GitHub\tfl_api\tfl_api\website\static\img\{suggested_station}.png")
     plt.close()
 
 

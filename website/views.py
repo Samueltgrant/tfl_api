@@ -9,7 +9,7 @@ from pprint import pprint
 views = Blueprint('views', __name__)
 
 
-df = pd.read_csv(r"C:\Users\Terrafirma\Documents\GitHub\personal_projects\tfl_api\tfl_api\tubes_df.csv")
+df = pd.read_csv(r"D:\GitHub\tfl_api\tubes_df.csv")
 if "Unnamed: 0" in df.columns:
     df.drop("Unnamed: 0", axis=1, inplace=True)
 
@@ -24,7 +24,6 @@ def home():
         stations = request.form.getlist('station_list')
         colours = ["mediumpurple", "cadetblue", "rosybrown", "mediumaquamarine", "cyan"]
         input_data = [stations, users, colours]
-        print(input_data)
         journey_cards = shortlisted_journeys(input_data, 3, df)
 
         session['journey_cards'] = journey_cards
@@ -44,21 +43,17 @@ def results():
     # return redirect(url_for('views.home'))
 
     if request.method == 'POST':
-        print(request.form.get("go_button"))
         if request.form['go_button'] == 'option_1':
             print("option_1 clicked")
             session['journey'] = 'option_1'
             return redirect(url_for('views.journey'))
         elif request.form['go_button'] == 'option_2':
             print("option_2 clicked")
-            session['journey'] = 'option_2'
             return redirect(url_for('views.journey'))
         elif request.form['go_button'] == 'option_3':
-            print("option_3 clicked")
             session['journey'] = 'option_3'
             return redirect(url_for('views.journey'))
         else:
-            print("Other clicked....")
             return redirect(url_for('views.journey'))
     return render_template('results.html')
 
