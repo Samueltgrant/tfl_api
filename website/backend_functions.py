@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 import sqlite3
 import aiohttp
 import asyncio
-from pprint import pprint
+
 
 
 def sqlify_station(station: str) -> str:
