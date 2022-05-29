@@ -18,6 +18,7 @@ access keys. This is obviously not generally good practice though!
 The project is largely working although there are a whole load of additions that need to be added before it could be 
 considered useful. The additions I'd like to slowly add are:
 
+
 #### Better error handling
 -   Sometimes I encounter significant errors using the tfl api. This is likely to be me not fully understanding the 
 response from tfl and I can hopefully fix when I have some more time to investigate it. I have found the tfl documentation
@@ -28,9 +29,7 @@ response from tfl and I can hopefully fix when I have some more time to investig
     This is likely to speed up the processing time significantly. I have 
 been using multiprocessing, which decreased the wait time by 2x but I'm not sure if this is sensible to use in a Flask
   server (not sure how this would affect mobile use - one to check).
-  
-- #### CSV -> database
-    The current method of opening a CSV file is obviously really bad and I should add this to a database soon.
+
 
 - #### Database options
     Currently, the station to station look up table is based purely off a 3pm Saturday leaving time journey. This would 
