@@ -14,15 +14,6 @@ This is a Flask based application, which also utilises JavaScript, HTML, CSS and
 The project is largely working although there are a whole load of additions that need to be added before it could be 
 considered useful. The additions I'd like to slowly add are:
 
-- ####Effective asynchronous GET requests.
-  
-    This is likely to speed up the processing time significantly. I have 
-been using multiprocessing, which decreased the wait time by 2x but I'm not sure if this is sensible to use in a Flask
-  server (not sure how this would affect mobile use - one to check).
-  
-- #### CSV -> database
-    The current method of opening a CSV file is obviously really bad and I should add this to a database soon.
-
 - #### Database options
     Currently, the station to station look up table is based purely off a 3pm Saturday leaving time journey. This would 
     not be a good estimate for other times, or when the tube is not running. If I created an hourly table look up for 
