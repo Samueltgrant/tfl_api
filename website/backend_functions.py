@@ -18,6 +18,7 @@ def sqlify_station(station: str) -> str:
                                                                                                                "").replace(
             "-", " ").split(' '))
 
+
 def variance(data: list) -> float:
     mean = sum(data) / len(data)
     deviations = [(x - mean) ** 2 for x in data]
@@ -59,75 +60,6 @@ def suggested_station_lookup(input_stations: list, return_number: int = 3):
         return [x[0] for x in c.fetchall()]
 
 
-#
-# @timed
-# def route_details(start_point, end_point, user, colour):
-#     """Returns only the useful information of the journey between two locations"""
-#     journey_legs = {}
-#     if start_point == end_point:
-#         return {'user': user,
-#                 'colour': colour,
-#                 'total_duration': 0,
-#                 'total_cost': 0,
-#                 'journey': journey_legs}
-#
-#     get_request = requests.get(
-#         f"https://api.tfl.gov.uk/journey/journeyresults/{start_point}/to/{end_point}&app_id={primary_key}&app_key={secondary_key}").json()
-#
-#     try:
-#         journey = get_request['journeys'][0]  # select earliest route?
-#     except KeyError as e:
-#         # first 0 needs to actually order the list based on highest matchQualityScore - also not sure the .split will
-#         # always work.
-#         if 'fromLocationDisambiguation' in get_request.keys():
-#             start_point_new, end_point_new = start_point, end_point
-#             if get_request['fromLocationDisambiguation'].get('disambiguationOptions', 0) !=0:
-#                 print(f"Disambiguation: {start_point}")
-#                 start_point_new = get_request['fromLocationDisambiguation']['disambiguationOptions'][0]['place']['commonName'].split(",")[0]
-#             elif get_request['toLocationDisambiguation'].get('disambiguationOptions', 0) !=0:
-#                 print(f"Disambiguation: {end_point}")
-#                 end_point_new = get_request['fromLocationDisambiguation']['disambiguationOptions'][0]['place']['commonName'].split(",")[0]
-#             else:
-#                 print("GET not working")
-#             get_request = requests.get(
-#                 f"https://api.tfl.gov.uk/journey/journeyresults/{start_point_new}/to/{end_point_new}&app_id={primary_key}&app_key={secondary_key}").json()
-#             journey = get_request['journeys'][0]  # select earliest route?
-#
-#         elif get_request.get('httpStatusCode') == 404:
-#             print("404 Code Error.")
-#         else:
-#             print(f"JOURNEY {start_point}-> {end_point} NOT FOUND BY API")  # NEED PROPER EXCEPTION ROUTE HERE
-#
-#     for leg in journey['legs']:
-#         journey_legs[leg['instruction']['summary']] = {
-#             'transport_mode': leg['mode']['name'],
-#             'departure_time': dt.strptime(leg['departureTime'], '%Y-%m-%dT%H:%M:%S').strftime("%H:%M"),
-#             'departure_tdelta': (dt.strptime(leg['departureTime'], '%Y-%m-%dT%H:%M:%S') - dt.now()).seconds // 60,
-#             'arrival_time': dt.strptime(leg['arrivalTime'], '%Y-%m-%dT%H:%M:%S').strftime("%H:%M"),
-#             'departure_point': leg['departurePoint'],  # .get('commonName')
-#             'arrival_point': leg['arrivalPoint'],  # .get('commonName')
-#             'journey_summary': leg['instruction']['summary'],
-#             'duration': leg['duration'],
-#             'stop_points': [x.get('name') for x in leg['path']['stopPoints']]
-#
-#         }
-#         stop_points = journey_legs[leg['instruction']['summary']]['stop_points']
-#         if len(stop_points) > 2:
-#             journey_legs[leg['instruction']['summary']]['stop_points'] = [x.replace(" Underground Station", "") for x in stop_points[:-1]]
-#
-#     journey_legs = OrderedDict(sorted(journey_legs.items(), key=lambda x: dt.strptime(getitem(x[1], 'departure_time'), "%H:%M")))
-#     try:
-#         cost = int(journey['fare']['totalCost'])
-#     except KeyError as e:
-#         cost = 0
-#         print(f"KeyError {e} does not exist between {start_point} -> {end_point}.")
-#
-#     return {'user': user,
-#             'colour': colour,
-#             'total_duration': journey['duration'],
-#             'total_cost': cost,
-#             'journey': journey_legs}
-
 def gen_lollipop(station_dict: dict, suggested_station) -> None:
     data = []
     for key, value in station_dict['routes'].items():
@@ -153,7 +85,6 @@ def gen_lollipop(station_dict: dict, suggested_station) -> None:
     plt.close()
 
 
-
 def gen_lollipop_diagrams(session) -> None:
     """Produces figure to be used as journey image in results page.
 
@@ -161,9 +92,6 @@ def gen_lollipop_diagrams(session) -> None:
     session data"""
     for key, value in session['station_options'].items():
         gen_lollipop(value, key)
-
-
-
 
 
 async def routes_request(session, routes, user_data):
@@ -178,82 +106,6 @@ async def routes_request(session, routes, user_data):
             station_input = journey['start_point']
             suggested_station = journey['end_point']
             session['station_options'][suggested_station]['routes'][station_input] = journey
-
-
-# @timed
-# def get_local_dict(suggested_station, input_stations, users, colours, number):
-#     initial_dict = {'suggested_station': suggested_station.replace(" Underground Station", ""), 'routes': {}}
-#     local_dict = routes_request(initial_dict, suggested_station, input_stations, users, colours)
-#     pprint("local dict", local_dict)
-#
-#     # for route_index, input_station in enumerate(input_stations):
-#     #     local_dict['routes'][f'route_{route_index + 1}'] = route_details(input_station, suggested_station,
-#     #                                                                      user=users[route_index],
-#     #                                                                      colour=colours[route_index])
-#
-#     duration_list = [value['total_duration'] for key, value in local_dict['routes'].items() if key.startswith("route_")]
-#     cost_list = [value['total_cost'] for key, value in local_dict['routes'].items() if key.startswith("route_")]
-#
-#     local_dict['avg_duration'] = int(sum(duration_list) / len(duration_list))
-#     local_dict['avg_cost'] = round(sum(cost_list) / len(cost_list) / 100, 2)
-#     local_dict['equality_cost'] = round(variance([(x / 100) for x in cost_list]), 2)
-#     local_dict['equality_duration'] = round(variance(duration_list), 2)
-#
-#     graph_data = [{'name': v['user'], 'duration': v['total_duration'],
-#                    'colour': v['colour']} for k, v in local_dict['routes'].items()]
-#     gen_lollipop(graph_data, suggested_station)
-#
-#     return local_dict
-
-
-# @timed
-# def shortlisted_journeys(user_data:list, return_number: int, df) -> dict:
-#     """Takes the input_stations and the shortest stations to get to from the get_total_times func and returns the
-#     updated times, as well as the journey information from each input station."""
-#     input_stations, users, colours = user_data
-#     suggested_stations = suggested_station_lookup(df, input_stations, return_number)
-#
-#     journey_dict = {}
-#     idx = 1
-#     for station in suggested_stations:
-#         journey_dict[f'option_{idx}'] = get_local_dict(station, input_stations, users, colours, idx)
-#         idx += 1
-#     # with concurrent.futures.ProcessPoolExecutor() as executor:
-#     #     results_index = 1
-#     #     results = [executor.submit(get_local_dict, station, input_stations, users, colours, results_index) for station in suggested_stations]
-#     #     for f in concurrent.futures.as_completed(results):
-#     #         journey_dict[f'option_{results_index}'] = f.result()
-#     #         results_index += 1
-#     return journey_dict
-
-
-def api_key_error(get_request, start_point, end_point):
-    # first 0 needs to actually order the list based on highest matchQualityScore - also not sure the .split will
-    # always work.
-    if 'fromLocationDisambiguation' in get_request.keys():
-        if get_request['fromLocationDisambiguation'].get('disambiguationOptions', 0) != 0:
-
-            print(f"from Disambiguation: {start_point}")
-            start_point = get_request['fromLocationDisambiguation']['disambiguationOptions'][0]['place']['commonName']
-            print("new start point:", start_point)
-        elif get_request['toLocationDisambiguation'].get('disambiguationOptions', 0) != 0:
-            print(f"to Disambiguation: {end_point}")
-            end_point = get_request['toLocationDisambiguation']['disambiguationOptions'][0]['place']['commonName']
-            print("new end point:", end_point)
-        else:
-            print("GET not working")
-
-        get_request = requests.get(f"https://api.tfl.gov.uk/journey/journeyresults/{start_point}/to/{end_point}&app_id={primary_key}&app_key={secondary_key}").json()
-        try:
-            return get_request['journeys'][0]  # select earliest route?
-        except KeyError:
-            pprint(get_request)
-            return None
-
-    elif get_request.get('httpStatusCode') == 404:
-        print("404 Code Error.")
-    else:
-        print(f"JOURNEY {start_point}-> {end_point} NOT FOUND BY API")  # NEED PROPER EXCEPTION ROUTE HERE
 
 
 async def get_station(session, url, start_point, end_point, user_data):
@@ -278,7 +130,7 @@ async def get_station(session, url, start_point, end_point, user_data):
         except KeyError as e:
             journey = api_key_error(get_request, start_point, end_point)
             if journey is None:
-                return journey_dict # error
+                return journey_dict  # error
 
         for leg in journey['legs']:
             journey_legs[leg['instruction']['summary']] = {
@@ -309,14 +161,45 @@ async def get_station(session, url, start_point, end_point, user_data):
         return journey_dict
 
 
+async def api_key_error(get_request, start_point, end_point):
+    # first 0 needs to actually order the list based on highest matchQualityScore - also not sure the .split will
+    # always work.
+    if 'fromLocationDisambiguation' in get_request.keys():
+        if get_request['fromLocationDisambiguation'].get('disambiguationOptions', 0) != 0:
+
+            print(f"from Disambiguation: {start_point}")
+            start_point = get_request['fromLocationDisambiguation']['disambiguationOptions'][0]['place']['commonName']
+            print("new start point:", start_point)
+        elif get_request['toLocationDisambiguation'].get('disambiguationOptions', 0) != 0:
+            print(f"to Disambiguation: {end_point}")
+            end_point = get_request['toLocationDisambiguation']['disambiguationOptions'][0]['place']['commonName']
+            print("new end point:", end_point)
+        else:
+            print("GET not working")
+
+        url = f"https://api.tfl.gov.uk/journey/journeyresults/{start_point}/to/{end_point}&app_id={primary_key}&app_key={secondary_key}"
+        get_request = requests.get(url).json()
+        try:
+            return get_request['journeys'][0]  # select earliest route?
+        except KeyError:
+            print("Unknown key error")
+            # pprint(get_request)
+            return None
+
+    elif get_request.get('httpStatusCode') == 404:
+        print("404 Code Error.")
+    else:
+        print(f"JOURNEY {start_point}-> {end_point} NOT FOUND BY API")  # NEED PROPER EXCEPTION ROUTE HERE
+
+
 def average_station_scores(session, suggested_stations):
     for key in session['station_options'].keys():
         total_duration = [session['station_options'][key]['routes'][x].get('total_duration') for x in session['station_options'][key]['routes'].keys()]
         total_cost = [session['station_options'][key]['routes'][x].get('total_cost') for x in session['station_options'][key]['routes'].keys()]
-        session['station_options'][key]['avg_duration'] = sum(total_duration) / len(total_duration)
-        session['station_options'][key]['avg_cost'] = sum(total_cost) / len(total_cost)
-        session['station_options'][key]['equality_cost'] = 1
-        session['station_options'][key]['equality_duration'] = 1
+        session['station_options'][key]['avg_duration'] = int(round(sum(total_duration) / len(total_duration), 0))
+        session['station_options'][key]['avg_cost'] = (sum(total_cost) / 100) / len(total_cost)
+        session['station_options'][key]['equality_cost'] = variance(total_cost)
+        session['station_options'][key]['equality_duration'] = variance(total_duration)
 
 
 # if __name__ == "__main__":

@@ -52,7 +52,7 @@ def home():
         asyncio.run(routes_request(session, all_routes, user_data))
         average_station_scores(session, suggested_stations)
         gen_lollipop_diagrams(session)
-        pprint(session['station_options'])
+
         end = time.perf_counter()
         print(f"gathering results took: {round(end - start, 2)}s")
 

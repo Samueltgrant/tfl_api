@@ -18,6 +18,9 @@ access keys. This is obviously not generally good practice though!
 The project is largely working although there are a whole load of additions that need to be added before it could be 
 considered useful. The additions I'd like to slowly add are:
 
+### add phone dimensions
+
+### add 'load more options' button
 
 #### Better error handling
 -   Sometimes I encounter significant errors using the tfl api. This is likely to be me not fully understanding the 

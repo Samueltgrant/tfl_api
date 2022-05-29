@@ -39,7 +39,9 @@
             {% else %}
             <i class="fa-icon fa-solid fa-sterling-sign icon-red"></i>
             {% endif %}
-            <p class="content-text cost">{{value['avg_cost']}}</p>
+            <p class="content-text cost">
+              {{'%0.2f' % value['avg_cost']|float}}
+            </p>
 
             <!-- Duration-->
             {% if value['avg_duration'] < 15 %}
@@ -54,26 +56,28 @@
             <!-- Duration equality-->
             {% if value['equality_duration'] < 10.0 %}
             <i class="fa-icon fa-regular fa-face-smile icon-green"></i>
+            <p class="content-text duration">Good journey duration variance</p>
             {% elif value['equality_duration'] < 50.0 %}
             <i class="fa-icon fa-regular fa-face-meh icon-amber"></i>
+            <p class="content-text duration">
+              Average journey duration variance
+            </p>
             {% else %}
             <i class="fa-icon fa-regular fa-face-frown icon-red"></i>
+            <p class="content-text duration">Poor journey duration variance</p>
             {% endif %}
-            <p class="content-text duration">
-              {{value['equality_duration']}}% journey duration variance
-            </p>
 
             <!-- Cost equality-->
             {% if value['equality_cost'] < 10.0 %}
             <i class="fa-icon fa-regular fa-face-smile icon-green"></i>
+            <p class="content-text duration">Good journey cost variance</p>
             {% elif value['equality_cost'] < 50.0 %}
             <i class="fa-icon fa-regular fa-face-meh icon-amber"></i>
+            <p class="content-text duration">Average journey cost variance</p>
             {% else %}
             <i class="fa-icon fa-regular fa-face-frown icon-red"></i>
+            <p class="content-text duration">Poor journey cost variance</p>
             {% endif %}
-            <p class="content-text duration">
-              {{value['equality_cost']}}% journey cost variance
-            </p>
           </div>
         </div>
         <div class="search">
