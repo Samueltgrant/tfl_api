@@ -1,17 +1,28 @@
+import asyncio
+import time
+
 from flask import Blueprint, render_template, Response, request, url_for, redirect, session
-from website.forms import JourneyDetailsForm
 import json
 import pandas as pd
-from website.backend_functions import shortlisted_journeys
+from website.backend_functions import suggested_station_lookup, routes_request, average_station_scores, \
+    gen_lollipop_diagrams
 from website.api_keys import primary_key, secondary_key
 from pprint import pprint
+import sqlite3
+from itertools import product
 
 views = Blueprint('views', __name__)
 
 
-df = pd.read_csv(r"D:\GitHub\tfl_api\tubes_df.csv")
-if "Unnamed: 0" in df.columns:
-    df.drop("Unnamed: 0", axis=1, inplace=True)
+def get_df():
+    with sqlite3.connect('meetup.db') as conn:
+        c = conn.cursor()
+        data = pd.DataFrame(c.execute("SELECT * FROM lookup;"))
+        return data
+
+
+df = get_df()
+
 
 def check_input(value):
     pass
@@ -20,16 +31,39 @@ def check_input(value):
 @views.route('/', methods=['GET', 'POST'])
 def home():
     if request.method == 'POST':
+        start = time.perf_counter()
+        session['station_options'] = {}
         users = request.form.getlist('user_list')
         stations = request.form.getlist('station_list')
-        colours = ["mediumpurple", "cadetblue", "rosybrown", "mediumaquamarine", "cyan"]
-        input_data = [stations, users, colours]
-        journey_cards = shortlisted_journeys(input_data, 3, df)
+        colours = ["mediumpurple", "cadetblue", "rosybrown", "mediumaquamarine", "cyan", 'palevioletred','crimson',
+                   'sienna', 'darkslategrey']
 
-        session['journey_cards'] = journey_cards
-        # print(session['journey_cards'])
+        data_zip = zip(stations, users, colours)
+        user_data = {}
+        for tup in data_zip:
+            user_data[tup[0]] = {'user': tup[1], 'colour': tup[2]}
+
+        suggested_stations = suggested_station_lookup(stations)
+
+        for station in suggested_stations:
+            session['station_options'][station] = {'routes': {}}
+
+        all_routes = [(x[0], x[1]) for x in list(product(suggested_stations, stations))]
+        asyncio.run(routes_request(session, all_routes, user_data))
+        average_station_scores(session, suggested_stations)
+        gen_lollipop_diagrams(session)
+        pprint(session['station_options'])
+        end = time.perf_counter()
+        print(f"gathering results took: {round(end - start, 2)}s")
 
         return redirect(url_for('views.results'))
+
+        # journey_cards = shortlisted_journeys(input_data, 3, df)
+        #
+        # session['journey_cards'] = journey_cards
+        # # print(session['journey_cards'])
+        #
+        # return redirect(url_for('views.results'))
     return render_template('index.html')
 
 
@@ -43,23 +77,14 @@ def results():
     # return redirect(url_for('views.home'))
 
     if request.method == 'POST':
-        if request.form['go_button'] == 'option_1':
-            print("option_1 clicked")
-            session['journey'] = 'option_1'
-            return redirect(url_for('views.journey'))
-        elif request.form['go_button'] == 'option_2':
-            print("option_2 clicked")
-            return redirect(url_for('views.journey'))
-        elif request.form['go_button'] == 'option_3':
-            session['journey'] = 'option_3'
-            return redirect(url_for('views.journey'))
-        else:
-            return redirect(url_for('views.journey'))
+        session['journey'] = request.form['go_button']
+        return redirect(url_for('views.journey'))
     return render_template('results.html')
 
 
 @views.route('/journey')
 def journey():
-    if ('journey_cards' in session) and ('journey' in session):
-        return render_template('journey.html')
-    return redirect(url_for('views.home'))
+    return render_template('journey.html')
+    # if ('journey_cards' in session) and ('journey' in session):
+    #     return render_template('journey.html')
+    # return redirect(url_for('views.home'))

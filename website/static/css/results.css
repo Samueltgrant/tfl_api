@@ -14,3 +14,9 @@
 .content-text {
   margin-left: 0.3rem;
 }
+
+img {
+  object-fit: contain;
+  max-width: 100%;
+  height: auto;
+}

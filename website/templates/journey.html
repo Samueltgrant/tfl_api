@@ -21,7 +21,7 @@
     <div class="container">
       <div class="container-journey">
         {% for key, value in
-        session['journey_cards'][session['journey']]['routes'].items() %}
+        session['station_options'][session['journey']]['routes'].items() %}
         <div class="card">
           <div class="content-journey">
             <h2 class="title-card" style="color: {{value.colour}};">

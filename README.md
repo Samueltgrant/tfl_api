@@ -9,10 +9,19 @@ conveinent tube stations, then returns the live journey for all users to these t
 
 This is a Flask based application, which also utilises JavaScript, HTML, CSS and jinja2.
 
+## How to use
+The server can be run by running main.py. The necessary packages are described in requirements.txt. The credentials for 
+running the server are left as plain text in api_keys.py to allow users to run the server without creating their own 
+access keys. This is obviously not generally good practice though!
 
 ## Future Improvements
 The project is largely working although there are a whole load of additions that need to be added before it could be 
 considered useful. The additions I'd like to slowly add are:
+
+#### Better error handling
+-   Sometimes I encounter significant errors using the tfl api. This is likely to be me not fully understanding the 
+response from tfl and I can hopefully fix when I have some more time to investigate it. I have found the tfl documentation
+    a bit slim here though so might need some playing around with the data outputs.
 
 - ####Effective asynchronous GET requests.
   
@@ -45,12 +54,7 @@ A "use current location" functionality would definitely be useful but users obvi
     
     The other side of this is that it would be good to suggest actual pubs / venues etc to meet at. This would be a lot 
     of additional work but could actually make this a really interesting app. 
-
-#### Better error handling
--   Somethimes I encounter significant errors using the tfl api. This is likely to be me not fully understanding the 
-response from tfl and I can hopefully fix when I have some more time to investigate it. I have found the tfl documentation
-    a bit slim here though.
-    
+        
 
 #### Convert to a front-end server
 -   I think this might potentially be faster to use Node JS as I'd be able to be load more results etc in the background?

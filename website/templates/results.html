@@ -20,21 +20,16 @@
   </head>
   <body>
     <div class="container">
-      {% for key, value in session['journey_cards'].items() %}
+      {% for key, value in session['station_options'].items() %}
       <div class="card">
         <div class="heading">
           <div class="photo-banner">
-            <img
-              class="img-tube"
-              src='../static/img/{{value["suggested_station"]}} Underground Station.png'
-            />
+            <img src="../static/img/{{key}}.png" />
           </div>
           <!-- src="../static/img/lollipop1.png" -->
         </div>
         <div class="content">
-          <h2 class="title-card card_{{key}}">
-            {{value["suggested_station"]}}
-          </h2>
+          <h2 class="title-card card_{{key}}">{{key}}</h2>
           <div class="content-details">
             <!-- Cost-->
             {% if value['avg_cost'] < 3.0 %}
