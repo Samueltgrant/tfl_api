@@ -121,16 +121,17 @@ async def get_station(session, url, start_point, end_point, user_data):
                     'journey': journey_legs}
 
         get_request = await resp.json()
-
         if start_point == end_point:
             return journey_dict
 
         try:
             journey = get_request['journeys'][0]  # select earliest route?
         except KeyError as e:
+            print("attempting api key error fix.")
             journey = api_key_error(get_request, start_point, end_point)
             if journey is None:
                 return journey_dict  # error
+
 
         for leg in journey['legs']:
             journey_legs[leg['instruction']['summary']] = {
@@ -161,31 +162,28 @@ async def get_station(session, url, start_point, end_point, user_data):
         return journey_dict
 
 
-async def api_key_error(get_request, start_point, end_point):
+def api_key_error(get_request, start_point, end_point):
     # first 0 needs to actually order the list based on highest matchQualityScore - also not sure the .split will
     # always work.
     if 'fromLocationDisambiguation' in get_request.keys():
         if get_request['fromLocationDisambiguation'].get('disambiguationOptions', 0) != 0:
-
-            print(f"from Disambiguation: {start_point}")
             start_point = get_request['fromLocationDisambiguation']['disambiguationOptions'][0]['place']['commonName']
             print("new start point:", start_point)
         elif get_request['toLocationDisambiguation'].get('disambiguationOptions', 0) != 0:
-            print(f"to Disambiguation: {end_point}")
             end_point = get_request['toLocationDisambiguation']['disambiguationOptions'][0]['place']['commonName']
             print("new end point:", end_point)
         else:
             print("GET not working")
 
+        # TODO: make this search async
         url = f"https://api.tfl.gov.uk/journey/journeyresults/{start_point}/to/{end_point}&app_id={primary_key}&app_key={secondary_key}"
         get_request = requests.get(url).json()
         try:
+            print("api key error fix attempted")
             return get_request['journeys'][0]  # select earliest route?
         except KeyError:
             print("Unknown key error")
-            # pprint(get_request)
             return None
-
     elif get_request.get('httpStatusCode') == 404:
         print("404 Code Error.")
     else:
