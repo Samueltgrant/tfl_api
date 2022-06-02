@@ -81,7 +81,7 @@ def gen_lollipop(station_dict: dict, suggested_station) -> None:
 
     fig.tight_layout()
     plt.savefig(
-        fr"D:\GitHub\tfl_api\tfl_api\website\static\img\{suggested_station}.png")
+        fr"website/static/img/{suggested_station}.png")
     plt.close()
 
 
