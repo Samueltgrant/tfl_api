@@ -25,13 +25,7 @@ considered useful. The additions I'd like to slowly add are:
 #### Better error handling
 -   Sometimes I encounter significant errors using the tfl api. This is likely to be me not fully understanding the 
 response from tfl and I can hopefully fix when I have some more time to investigate it. I have found the tfl documentation
-    a bit slim here though so might need some playing around with the data outputs.
-
-- ####Effective asynchronous GET requests.
-  
-    This is likely to speed up the processing time significantly. I have 
-been using multiprocessing, which decreased the wait time by 2x but I'm not sure if this is sensible to use in a Flask
-  server (not sure how this would affect mobile use - one to check).
+    a bit slim here though so might need some playing around with the data outputs
 
 
 - #### Database options
